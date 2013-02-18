@@ -1,0 +1,38 @@
+<head>
+  <title>Bigboard</title>
+</head>
+
+<body>
+  <div id="outer">
+
+  <h1>what's your favorite cli tool?</h1>
+    {{> bigboard}}
+  </div>
+</body>
+
+<template name="bigboard">
+  <div class="bigboard">
+    {{#each answers}}
+      {{> answer}}
+    {{/each}}
+  </div>
+
+  {{#if selected_answer}}
+  <div class="details">
+    <div class="name">{{selected_answer}}</div>
+    <input type="button" class="inc" value="Display it" />
+  </div>
+  {{/if}}
+
+  {{#unless selected_answer}}
+  <div class="none">Click a question to display on the big board</div>
+  {{/unless}}
+</template>
+
+<template name="answer">
+  <div class="answer {{selected}}">
+    <span class="text">{{text}}</span>
+    <span class="score">{{score}}</span>
+  </div>
+</template>
+

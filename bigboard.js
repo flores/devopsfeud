@@ -1,29 +1,50 @@
 Questions = new Meteor.Collection("questions");
 
 if (Meteor.isClient) {
+  Meteor.Router.add({
+    '/': 'bigboard',
+    '/bigboard': 'bigboard',
+
+    '/admin': 'admin',
+
+/*
+    '/posts/:id': function(id) {
+      Session.set('postId', id);
+      return 'post';
+    }
+*/
+  });
+
+
   Template.bigboard.answers = function () {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
     console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
     return Questions.find({}, {sort: {score: -1, text: 1}});
   };
 
-  Template.bigboard.selected_answer = function () {
+  Template.admin.answers = function () {
+//    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
+    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
+    return Questions.find({}, {sort: {score: -1, text: 1}});
+  };
+
+  Template.admin.selected_answer = function () {
 //    var answer = Questions.findOne( {answers: {text: Session.get("selected_answer")}});
     var answer = Questions.findOne(Session.get("selected_answer"));
     return answer && answer.text;
   };
 
-  Template.answer.selected = function () {
+  Template.admin.selected = function () {
     return Session.equals("selected_answer", this._id) ? "selected" : '';
   };
 
-  Template.bigboard.events({
+  Template.admin.events({
     'click input.display': function () {
       Questions.update(Session.get("selected_answer"), {$set: {display: true}});
     }
   });
 
-  Template.answer.events({
+  Template.admin.events({
     'click': function () {
       Session.set("selected_answer", this._id);
     }

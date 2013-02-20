@@ -38,11 +38,11 @@ if (Meteor.isClient) {
     return Session.equals("display_answer", this._id) ? "selected" : '';
   };
 
-
   Template.admin.events({
     'click input.display': function () {
-      console.log(Questions.update(Session.get("display_answer"), {$set: {display: "true"}}));
-      Questions.update(Session.get("display_answer"), {$set: {display: "true"}});
+      console.log(Questions.update(Session.get("display_answer"), {$set: {display: "yes"}}));
+      Questions.update(Session.get("display_answer"), {$set: {display: "yes"}});
+      console.log("i got here");
     }
   });
 
@@ -58,35 +58,49 @@ if (Meteor.isServer) {
     console.log("i got here");
     console.log(Questions.find().count());
     if (Questions.find().count() === 0) {
-      Questions.insert(
+//      Questions.insert(
 //	{
 //	  question: "What is an indispensible tool?",
 //	  answers:
-	  [
 	    
-		    { 
+		    Questions.insert({ 
 		      text: "grep",
 		      score: 50,
-		      display: false
-		    },
-		    {
+		      display: "no"
+		    });
+		    Questions.insert({
 		      text: "cat",
 		      score: 10,
-		      display: false
-		    },
-		    {
+		      display: "no"
+		    });
+		    Questions.insert({
 		      text: "perl",
 		      score: 20,
-		      display: false
-		    },
-		    {
+		      display: "no"
+		    });
+		    Questions.insert({
 		      text: "rm -rf /",
 		      score: 100,
-		      display: false
-		    }
-	  ]	    
+		      display: "no"
+		    });
+		    Questions.insert({
+		      text: "nc",
+		      score: 100,
+		      display: "no"
+		    });
+		    Questions.insert({
+		      text: "cd",
+		      score: 1,
+		      display: "no"
+		    });
+		    Questions.insert({
+		      text: "node -e 'console.log(fuck dave)'",
+		      score: 1000,
+		      display: "no"
+		    });
+//	  ]	    
 //	}
-      );
+//      );
 
     }
   });

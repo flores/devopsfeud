@@ -35,6 +35,36 @@ body {
     color: #777;
 }
 
+.answer .bigtext-no {
+    display: inline-block;
+    width: 300px;
+    font-size: 1.75em;
+    color: white;
+}
+
+.answer .bigscore-no {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    font-size: 2em;
+    font-weight: bold;
+    color: white;
+}
+.answer .bigtext-yes {
+    display: inline-block;
+    width: 300px;
+    font-size: 1.75em;
+}
+
+.answer .bigscore-yes {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    font-size: 2em;
+    font-weight: bold;
+    color: #777;
+}
+
 .answer.selected {
     background-color: yellow;
 }

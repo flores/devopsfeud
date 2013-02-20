@@ -13,9 +13,8 @@
     <h1>what's your favorite cli tool?</h1>
     {{#each answers}}
       <div class="answer {{selected}}">
-        <span class="text">{{text}}</span>
-        <span class="score">{{score}}</span>
-        <span class="score">{{display}}</span>
+	<span class="bigtext-{{display}}">{{text}}</span>
+	<span class="bigscore-{{display}}">{{score}}</span>
       </div>
     {{/each}}
   </div>
@@ -28,9 +27,9 @@
   <div class="bigboard">
     {{#each answers}}
       <div class="answer {{selected}}">
-        <span class="text">{{text}}</span>
-        <span class="score">{{score}}</span>
-        <span class="score">{{display}}</span>
+          <span class="text">{{text}}</span>
+          <span class="score">{{score}}</span>
+	  <span class="score">{{display}}</span>
       </div>
     {{/each}}
   </div>

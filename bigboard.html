@@ -8,8 +8,9 @@
 
 <template name="bigboard">
 
-  <h1>what's your favorite cli tool?</h1>
   <div class="bigboard">
+    <img src="http://downoi.petalphile.com/stuff/header.png" alt="devops family feud!">
+    <h1>what's your favorite cli tool?</h1>
     {{#each answers}}
       <div class="answer {{selected}}">
         <span class="text">{{text}}</span>
@@ -37,9 +38,11 @@
   {{#if selected_answer}}
   <div class="details">
     <div class="name">{{selected_answer}}</div>
-    <input type="button" class="inc" value="Display it" />
+    <input type="button" class="display" value="Display it" />
   </div>
   {{/if}}
+
+  <input type="button" class="inc" value="WRONG ANSWER" />
 
   {{#unless selected_answer}}
   <div class="none">Click a question to display on the big board</div>

@@ -30,23 +30,25 @@ if (Meteor.isClient) {
 
   Template.admin.selected_answer = function () {
 //    var answer = Questions.findOne( {answers: {text: Session.get("selected_answer")}});
-    var answer = Questions.findOne(Session.get("selected_answer"));
+    var answer = Questions.findOne(Session.get("display_answer"));
     return answer && answer.text;
   };
 
   Template.admin.selected = function () {
-    return Session.equals("selected_answer", this._id) ? "selected" : '';
+    return Session.equals("display_answer", this._id) ? "selected" : '';
   };
+
 
   Template.admin.events({
     'click input.display': function () {
-      Questions.update(Session.get("selected_answer"), {$set: {display: true}});
+      console.log(Questions.update(Session.get("display_answer"), {$set: {display: "true"}}));
+      Questions.update(Session.get("display_answer"), {$set: {display: "true"}});
     }
   });
 
   Template.admin.events({
     'click': function () {
-      Session.set("selected_answer", this._id);
+      Session.set("display_answer", this._id);
     }
   });
 }

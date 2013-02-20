@@ -15,16 +15,15 @@ if (Meteor.isClient) {
 */
   });
 
-
   Template.bigboard.answers = function () {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
-    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
+//    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
     return Questions.find({}, {sort: {score: -1, text: 1}});
   };
 
   Template.admin.answers = function () {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
-    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
+//    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
     return Questions.find({}, {sort: {score: -1, text: 1}});
   };
 
@@ -32,6 +31,18 @@ if (Meteor.isClient) {
 //    var answer = Questions.findOne( {answers: {text: Session.get("selected_answer")}});
     var answer = Questions.findOne(Session.get("display_answer"));
     return answer && answer.text;
+  };
+
+  Template.bigboard.question_points = function () {
+    console.log("i got here");
+    var qscore = Questions.find({display: "yes"}, {score: 1, _id: 0});
+    var tscore = 0;
+    qscore.forEach (function (each_score) {
+      console.log(each_score);
+      tscore += each_score.score;
+    });
+    console.log(tscore);
+    return tscore;
   };
 
   Template.admin.selected = function () {
@@ -94,7 +105,7 @@ if (Meteor.isServer) {
 		      display: "no"
 		    });
 		    Questions.insert({
-		      text: "node -e 'console.log(fuck dave)'",
+		      text: "echo oh no why |wall",
 		      score: 1000,
 		      display: "no"
 		    });

@@ -11,6 +11,10 @@
   <div class="bigboard">
     <img src="http://downoi.petalphile.com/stuff/header.png" alt="devops family feud!">
     <h1>what's your favorite cli tool?</h1>
+    <div class="answer">
+      <span class="bigtext-yes">question points<span>
+      <span class="bigscore-yes">{{ question_points }}</span>
+    </div>
     {{#each answers}}
       <div class="answer {{selected}}">
 	<span class="bigtext-{{display}}">{{text}}</span>

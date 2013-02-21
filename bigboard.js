@@ -19,7 +19,7 @@ if (Meteor.isClient) {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
 //    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
 //    return Questions.find({question:"What is an indispensible tool?"}, {sort: {'answers.score': -1, 'answers.text': 1}});
-    var pie= Questions.find({question:"What is an indispensible tool?"}, {answers: 1, _id:0});
+    var pie= Questions.find({question:"What is an indispensible tool?"}, {answers: 1});
     var cake = '';
     // OMG why
     pie.forEach(function (answer) {
@@ -32,7 +32,7 @@ if (Meteor.isClient) {
   Template.admin.answers = function () {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
 //    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
-    var pie= Questions.find({question:"What is an indispensible tool?"}, {answers: 1, _id:0});
+    var pie= Questions.find({question:"What is an indispensible tool?"}, {sort : {'answers.score': -1}});
     var cake = '';
     // OMG why
     pie.forEach(function (answer) {
@@ -43,9 +43,7 @@ if (Meteor.isClient) {
   };
 
   Template.admin.selected_answer = function () {
-//    var answer = Questions.findOne( {answers: {text: Session.get("selected_answer")}});
-    var answer = Questions.findOne({'answers.text':Session.get("display_answer")});
-    return answer && answer.text;
+    return Session.get("display_answer");
   };
 
   Template.bigboard.question_points = function () {
@@ -61,20 +59,29 @@ if (Meteor.isClient) {
   };
 
   Template.admin.selected = function () {
-    return Session.equals("display_answer", this._id) ? "selected" : '';
+//    console.log("display_answer", this.text);
+    return Session.equals("display_answer", this.text) ? "selected" : '';
   };
 
   Template.admin.events({
     'click input.display': function () {
-      console.log(Questions.update(Session.get("display_answer"), {$set: {'answers.display': "yes"}}));
-      Questions.update(Session.get("display_answer"), {$set: {'answers.display': "yes"}});
+      var id;
+      Questions.find({question:"What is an indispensible tool?"}).forEach( function (set) {
+	id = set._id;
+	set.answers.forEach( function (answer) {
+	  if (answer.text == Session.get("display_answer")) {
+	    answer.display = "yes";
+	  }
+	});
+        Questions.update(id, set);
+      });
       console.log("i got here");
     }
   });
 
   Template.admin.events({
     'click': function () {
-      Session.set("display_answer", this._id);
+      Session.set("display_answer", this.text);
     }
   });
 }
@@ -88,14 +95,19 @@ if (Meteor.isServer) {
 	{
 	  question: "What is an indispensible tool?",
 	  answers: [
+		    {
+		      text: "echo oh no why |wall",
+		      score: 1000,
+		      display: "no"
+		    },
 		    { 
 		      text: "grep",
-		      score: 50,
+		      score: 500,
 		      display: "no"
 		    },
 		    {
 		      text: "cat",
-		      score: 10,
+		      score: 100,
 		      display: "no"
 		    },
 		    {
@@ -105,22 +117,17 @@ if (Meteor.isServer) {
 		    },
 		    {
 		      text: "rm -rf /",
-		      score: 100,
+		      score: 10,
 		      display: "no"
 		    },
 		    {
 		      text: "nc",
-		      score: 100,
+		      score: 1,
 		      display: "no"
 		    },
 		    {
 		      text: "cd",
 		      score: 1,
-		      display: "no"
-		    },
-		    {
-		      text: "echo oh no why |wall",
-		      score: 1000,
 		      display: "no"
 		    }
 	  ]	    

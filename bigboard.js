@@ -47,12 +47,16 @@ if (Meteor.isClient) {
   };
 
   Template.bigboard.question_points = function () {
-    console.log("i got here");
-    var qscore = Questions.find({question:"What is an indispensible tool?", 'answers.display': "yes"}, {'answers.score': 1, _id: 0});
+    var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
+    console.log(answerset);
     var tscore = 0;
-    qscore.forEach (function (each_score) {
-      console.log(each_score);
-      tscore += each_score.score;
+    answerset.forEach(function (set) {
+      set.answers.forEach (function (answer) {
+        if (answer.display == 'yes') {
+	  console.log(answer.score);
+	  tscore += answer.score;
+        }
+      });
     });
     console.log(tscore);
     return tscore;

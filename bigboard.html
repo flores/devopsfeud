@@ -18,7 +18,7 @@
 	{{#if who_is_incontrol }}
 	    <h2>{{who_is_incontrol}} controls the board!</h2>
 	{{/if}}
-      <h1>what's your favorite cli tool?</h1>
+	<h1>{{ current_question }}</h1>
       <div class="answer">
 	<span class="bigtext-yes">points<span>
 	<span class="bigscore-yes">{{ question_points }}</span><br/>
@@ -71,6 +71,8 @@
     <input type="button" class="edgecast_getspoints" value="EdgeCast"/>
     <br/>
     <input type="button" class="facebook_getspoints" value="Facebook"/>
+    <h2>NEXT Question</h2>
+    <input type="button" class="next_question" value="NEXT QUESTION"/>
   </div>
 </template>
 

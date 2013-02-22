@@ -22,13 +22,34 @@ if (Meteor.isClient) {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
 //    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
 //    return Questions.find({question:"What is an indispensible tool?"}, {sort: {'answers.score': -1, 'answers.text': 1}});
-    var pie= Questions.find({question:"What is an indispensible tool?"}, {answers: 1});
+    var current = Incontrol.find({}, {currentanswer:1});
+    var currentnumber = '';
+    current.forEach(function (bullshit) {
+      currentnumber = bullshit.currentanswer;
+    });
+    var pie= Questions.find({number: currentnumber}, {answers: 1});
     var cake = '';
     // OMG why
     pie.forEach(function (answer) {
       cake = answer.answers;
     });
     console.log(cake);
+    return cake;
+  };
+
+  Template.bigboard.current_question = function () {
+    var current = Incontrol.find({}, {currentanswer:1});
+    var currentnumber = '';
+    var cake='';
+    current.forEach(function (bullshit) {
+      currentnumber = bullshit.currentanswer;
+    });
+    console.log("current number", currentnumber);
+    var pie= Questions.find({number: currentnumber});
+    pie.forEach(function (set) {
+      console.log("current", set.question);
+      cake = set.question;
+    });
     return cake;
   };
 
@@ -64,7 +85,12 @@ if (Meteor.isClient) {
   Template.admin.answers = function () {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
 //    console.log(Questions.find({}, {sort: {score: -1, text: 1}}));
-    var pie= Questions.find({question:"What is an indispensible tool?"}, {sort : {'answers.score': -1}});
+    var current = Incontrol.find({}, {currentanswer:1});
+    var currentnumber = '';
+    current.forEach(function (bullshit) {
+      currentnumber = bullshit.currentanswer;
+    });
+    var pie= Questions.find({number: currentnumber}, {answers: 1});
     var cake = '';
     // OMG why
     pie.forEach(function (answer) {
@@ -79,7 +105,13 @@ if (Meteor.isClient) {
   };
 
   Template.bigboard.question_points = function () {
-    var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
+    var current = Incontrol.find({}, {currentanswer:1});
+    var currentnumber = '';
+    current.forEach(function (bullshit) {
+      currentnumber = bullshit.currentanswer;
+    });
+    var answerset= Questions.find({number: currentnumber}, {answers: 1});
+    //var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
     var tscore = 0;
     answerset.forEach(function (set) {
       set.answers.forEach (function (answer) {
@@ -102,7 +134,12 @@ if (Meteor.isClient) {
   Template.admin.events({
     'click input.display': function () {
       var id;
-      Questions.find({question:"What is an indispensible tool?"}).forEach( function (set) {
+      var current = Incontrol.find({}, {currentanswer:1});
+      var currentnumber = '';
+      current.forEach(function (bullshit) {
+        currentnumber = bullshit.currentanswer;
+      });
+      Questions.find({number: currentnumber}).forEach( function (set) {
 	id = set._id;
 	set.answers.forEach( function (answer) {
 	  if (answer.text == Session.get("display_answer")) {
@@ -116,12 +153,25 @@ if (Meteor.isClient) {
   });
   Template.admin.events({
     'click input.edgecast_incontrol': function () {
-      Incontrol.insert({incontrol: "EdgeCast"});
+      var current = Incontrol.find({});
+      var currentnumber = '';
+      var myid='';
+      current.forEach(function (bullshit) {
+        myid=bullshit._id;
+	bullshit.incontrol="EdgeCast";
+        Incontrol.update( myid, bullshit);
+      });
     }
   });
   Template.admin.events({
     'click input.facebook_incontrol': function () {
-      Incontrol.insert({incontrol: "Facebook"});
+      var current = Incontrol.find({});
+      var currentnumber = '';
+      current.forEach(function (bullshit) {
+        myid=bullshit._id;
+	bullshit.incontrol="Facebook";
+        Incontrol.update( myid, bullshit);
+      });
     }
   });
 
@@ -130,7 +180,12 @@ if (Meteor.isClient) {
       var oldscore = EC_score.find({}, {score: 1});
       var points;
       var score;
-      var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
+      var current = Incontrol.find({}, {currentanswer:1});
+      var currentnumber = '';
+      current.forEach(function (bullshit) {
+        currentnumber = bullshit.currentanswer;
+      });
+      var answerset = Questions.find({number: currentnumber}, {answers: 1}); 
       var tscore = 0;
       answerset.forEach(function (set) {
         set.answers.forEach (function (answer) {
@@ -151,7 +206,12 @@ if (Meteor.isClient) {
       var oldscore = FB_score.find({}, {score: 1});
       var points;
       var score;
-      var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
+      var current = Incontrol.find({}, {currentanswer:1});
+      var currentnumber = '';
+      current.forEach(function (bullshit) {
+        currentnumber = bullshit.currentanswer;
+      });
+      var answerset = Questions.find({number: currentnumber}, {answers: 1}); 
       var tscore = 0;
       answerset.forEach(function (set) {
         set.answers.forEach (function (answer) {
@@ -167,7 +227,18 @@ if (Meteor.isClient) {
       FB_score.insert({ score: score });
     }
   });
-  
+ 
+  Template.admin.events({
+      'click input.next_question': function() {
+      var current = Incontrol.find({}, {currentanswer:1});
+      var currentnumber = '';
+      current.forEach(function (bullshit) {
+        currentnumber = bullshit.currentanswer;
+      });
+      currentnumber += 1;
+      Incontrol.insert({currentanswer:currentnumber,wrong: 0, currentpoints:0});
+      }
+  });
   Template.admin.events({
     'click': function () {
       Session.set("display_answer", this.text);
@@ -180,7 +251,7 @@ if (Meteor.isServer) {
     console.log("i got here");
     console.log(Questions.find().count());
     if (Incontrol.find().count() == 0) {
-      Incontrol.insert({ wrong: 0, currentpoints: 0});
+      Incontrol.insert({ currentanswer: 1, wrong: 0, currentpoints: 0});
     }
     if (EC_score.find().count() == 0) {
       EC_score.insert({ score: 0, wrong: 0});
@@ -192,6 +263,7 @@ if (Meteor.isServer) {
       Questions.insert(
 	{
 	  question: "What is an indispensible tool?",
+	  number: 1,
 	  answers: [
 		    {
 		      text: "echo oh no why |wall",
@@ -229,6 +301,22 @@ if (Meteor.isServer) {
 		      display: "no"
 		    }
 	  ]	    
+	},
+	{
+	  question: "This is the second question",
+	  number: 2,
+	  answers: [ 
+	    {
+	      text: "first ans",
+	      score: 100,
+	      display: "no"
+	    },
+	    {
+	      text: "second",
+	      score: 1,
+	      display: "no"
+	    }
+	  ]
 	}
       );
 

@@ -9,18 +9,31 @@
 <template name="bigboard">
 
   <div class="bigboard">
-    <img src="http://downoi.petalphile.com/stuff/header.png" alt="devops family feud!">
-    <h1>what's your favorite cli tool?</h1>
-    <div class="answer">
-      <span class="bigtext-yes">question points<span>
-      <span class="bigscore-yes">{{ question_points }}</span>
+    <div class="edgecast_points" style="Float:left;width:25%">
+      <img src="http://downoi.petalphile.com/stuff/edgecast-logo.png" width="200" height="200" alt="edgecast">
+      <h2><small>points:</small> {{ edgecast_points }}</h2>
     </div>
-    {{#each answers}}
-      <div class="answer {{selected}}">
-	<span class="bigtext-{{display}}">{{text}}</span>
-	<span class="bigscore-{{display}}">{{score}}</span>
+    <div style="Float:left;width:50%">
+      <img src="http://downoi.petalphile.com/stuff/header.png" alt="devops family feud!">
+	{{#if who_is_incontrol }}
+	    <h2>{{who_is_incontrol}} controls the board!</h2>
+	{{/if}}
+      <h1>what's your favorite cli tool?</h1>
+      <div class="answer">
+	<span class="bigtext-yes">points<span>
+	<span class="bigscore-yes">{{ question_points }}</span><br/>
       </div>
-    {{/each}}
+      {{#each answers}}
+	<div class="answer {{selected}}">
+	  <span class="bigtext-{{display}}">{{text}}</span>
+	  <span class="bigscore-{{display}}">{{score}}</span>
+	</div>
+      {{/each}}
+    </div>
+    <div class="facebook_points" style="Float:left;width:25%">
+      <img src="http://downoi.petalphile.com/stuff/facebook-logo.jpg" width="200" height="200" alt="facebook">
+      <h2><small>points:</small> {{ facebook_points }}</h2>
+    </div>
   </div>
 
 </template>
@@ -29,13 +42,13 @@
 
   <h1>what's your favorite cli tool?</h1>
   <div class="bigboard">
-    {{#each answers}}
-      <div class="answer {{selected}}">
+      {{#each answers}}
+	<div class="answer {{selected}}">
 	  <span class="text">{{text}}</span>
           <span class="score">{{score}}</span>
 	  <span class="score">{{display}}</span>
-      </div>
-    {{/each}}
+	</div>
+      {{/each}}
   </div>
 
   {{#if selected_answer}}
@@ -43,12 +56,18 @@
     <div class="name">{{selected_answer}}</div>
     <input type="button" class="display" value="Display it" />
   </div>
+  {{else}}
+  <div class="none">Click to question to display on the big board</div>
   {{/if}}
 
-  <input type="button" class="inc" value="WRONG ANSWER" />
+  <input type="button" class="wrong" value="WRONG ANSWER" />
 
-  {{#unless selected_answer}}
-  <div class="none">Click a question to display on the big board</div>
-  {{/unless}}
+  <div class="answer">
+    <h3>Control of the Big Board</h3>
+    <input type="button" class="edgecast_incontrol" value="EdgeCast"/>
+    <br/>
+    <input type="button" class="facebook_incontrol" value="Facebook"/>
+  </div>
+  
 </template>
 

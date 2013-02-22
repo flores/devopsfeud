@@ -1,4 +1,7 @@
 Questions = new Meteor.Collection("questions");
+EC_score = new Meteor.Collection("ec_score");
+FB_score = new Meteor.Collection("fb_score");
+Incontrol = new Meteor.Collection("incontrol");
 
 if (Meteor.isClient) {
   Meteor.Router.add({
@@ -28,6 +31,35 @@ if (Meteor.isClient) {
     console.log(cake);
     return cake;
   };
+
+  Template.bigboard.edgecast_points = function () {
+    var score = EC_score.find({}, {score: 1});
+    var teamscore;
+    score.forEach(function (set) {
+      teamscore = set.score;
+    });
+    console.log("ec score",teamscore);
+    return teamscore;
+  };
+  
+  Template.bigboard.facebook_points = function () {
+    var score = FB_score.find({}, {score: 1});
+    var teamscore;
+    score.forEach(function (set) {
+      teamscore = set.score;
+    });
+    console.log("ec score",teamscore);
+    return teamscore;
+  };
+
+  Template.bigboard.who_is_incontrol = function () {
+    var incontrolset = Incontrol.find({});
+    var incontrol;
+    incontrolset.forEach(function (set) {
+      incontrol = set.incontrol;
+    });
+    return incontrol;
+  }
 
   Template.admin.answers = function () {
 //    console.log(Questions.find({}, {answers: {sort: {score: -1, text: 1}}}));
@@ -82,6 +114,16 @@ if (Meteor.isClient) {
       console.log("i got here");
     }
   });
+  Template.admin.events({
+    'click input.edgecast_incontrol': function () {
+      Incontrol.insert({incontrol: "EdgeCast"});
+    }
+  });
+  Template.admin.events({
+    'click input.facebook_incontrol': function () {
+      Incontrol.insert({incontrol: "Facebook"});
+    }
+  });
 
   Template.admin.events({
     'click': function () {
@@ -94,7 +136,16 @@ if (Meteor.isServer) {
   Meteor.startup(function () {
     console.log("i got here");
     console.log(Questions.find().count());
-    if (Questions.find().count() === 0) {
+    if (Incontrol.find().count() == 0) {
+      Incontrol.insert({ wrong: 0});
+    }
+    if (EC_score.find().count() == 0) {
+      EC_score.insert({ score: 0, wrong: 0});
+    }
+    if (FB_score.find().count() == 0) {
+      FB_score.insert({ score: 0, wrong: 0});
+    }
+    if (Questions.find().count() == 0) {
       Questions.insert(
 	{
 	  question: "What is an indispensible tool?",

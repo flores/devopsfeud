@@ -80,17 +80,17 @@ if (Meteor.isClient) {
 
   Template.bigboard.question_points = function () {
     var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
-    console.log(answerset);
     var tscore = 0;
     answerset.forEach(function (set) {
       set.answers.forEach (function (answer) {
         if (answer.display == 'yes') {
-	  console.log(answer.score);
 	  tscore += answer.score;
         }
       });
     });
-    console.log(tscore);
+    //if (tscore > 0) {
+      //Incontrol.insert({currentpoints: tscore});
+    //}
     return tscore;
   };
 
@@ -126,6 +126,49 @@ if (Meteor.isClient) {
   });
 
   Template.admin.events({
+    'click input.edgecast_getspoints': function () {
+      var oldscore = EC_score.find({}, {score: 1});
+      var points;
+      var score;
+      var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
+      var tscore = 0;
+      answerset.forEach(function (set) {
+        set.answers.forEach (function (answer) {
+          if (answer.display == 'yes') {
+	    tscore += answer.score;
+          }
+        });
+      });
+      oldscore.forEach(function (teamset) {
+        score = teamset.score;
+      });
+      score += tscore;
+      EC_score.insert({ score: score });
+    }
+  });
+  Template.admin.events({
+    'click input.facebook_getspoints': function () {
+      var oldscore = FB_score.find({}, {score: 1});
+      var points;
+      var score;
+      var answerset = Questions.find({question:"What is an indispensible tool?"}, {answers: 1}); 
+      var tscore = 0;
+      answerset.forEach(function (set) {
+        set.answers.forEach (function (answer) {
+          if (answer.display == 'yes') {
+	    tscore += answer.score;
+          }
+        });
+      });
+      oldscore.forEach(function (teamset) {
+        score = teamset.score;
+      });
+      score += tscore;
+      FB_score.insert({ score: score });
+    }
+  });
+  
+  Template.admin.events({
     'click': function () {
       Session.set("display_answer", this.text);
     }
@@ -137,7 +180,7 @@ if (Meteor.isServer) {
     console.log("i got here");
     console.log(Questions.find().count());
     if (Incontrol.find().count() == 0) {
-      Incontrol.insert({ wrong: 0});
+      Incontrol.insert({ wrong: 0, currentpoints: 0});
     }
     if (EC_score.find().count() == 0) {
       EC_score.insert({ score: 0, wrong: 0});

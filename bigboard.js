@@ -230,13 +230,15 @@ if (Meteor.isClient) {
  
   Template.admin.events({
       'click input.next_question': function() {
-      var current = Incontrol.find({}, {currentanswer:1});
-      var currentnumber = '';
+      var current = Incontrol.find({});
+      var currentid = '';
       current.forEach(function (bullshit) {
-        currentnumber = bullshit.currentanswer;
+        bullshit.currentanswer += 1;
+	bullshit.currentpoints = 0;
+	bullshit.incontrol = '';
+	id = bullshit._id;
+        Incontrol.update(id, bullshit);
       });
-      currentnumber += 1;
-      Incontrol.insert({currentanswer:currentnumber,wrong: 0, currentpoints:0});
       }
   });
   Template.admin.events({
@@ -262,64 +264,440 @@ if (Meteor.isServer) {
     if (Questions.find().count() == 0) {
       Questions.insert(
 	{
-	  question: "What is an indispensible tool?",
+	  question: "Name an indispensible UNIX utility",
 	  number: 1,
 	  answers: [
 		    {
-		      text: "echo oh no why |wall",
-		      score: 1000,
+		      text: "grep",
+		      score: 13,
 		      display: "no"
 		    },
 		    { 
-		      text: "grep",
-		      score: 500,
+		      text: "ls",
+		      score: 5,
 		      display: "no"
 		    },
 		    {
-		      text: "cat",
-		      score: 100,
+		      text: "awk",
+		      score: 3,
 		      display: "no"
 		    },
 		    {
-		      text: "perl",
-		      score: 20,
+		      text: "lsof",
+		      score: 3,
 		      display: "no"
 		    },
 		    {
-		      text: "rm -rf /",
-		      score: 10,
+		      text: "ssh",
+		      score: 3,
 		      display: "no"
 		    },
 		    {
-		      text: "nc",
+		      text: "strace",
+		      score: 3,
+		      display: "no"
+		    },
+		    {
+		      text: "vi/vim",
+		      score: 3,
+		      display: "no"
+		    },
+		    {
+		      text: "less",
+		      score: 2,
+		      display: "no"
+		    },
+		    {
+		      text: "netcat",
+		      score: 2,
+		      display: "no"
+		    },
+		    {
+		      text: "rm -rf",
+		      score: 2,
+		      display: "no"
+		    }
+	  ]	    
+	});
+      Questions.insert(
+	{
+	  question: "Name something that wakes you up at night",
+	  number: 2,
+	  answers: [
+		    {
+		      text: "PagerDuty",
+		      score: 9,
+		      display: "no"
+		    },
+		    { 
+		      text: "pager/phone",
+		      score: 8,
+		      display: "no"
+		    },
+		    {
+		      text: "cat/dog/pets",
+		      score: 6,
+		      display: "no"
+		    },
+		    {
+		      text: "Nagios",
+		      score: 6,
+		      display: "no"
+		    },
+		    {
+		      text: "family",
+		      score: 5,
+		      display: "no"
+		    },
+		    {
+		      text: "bladder/restroom",
+		      score: 4,
+		      display: "no"
+		    },
+		    {
+		      text: "NOC",
+		      score: 3,
+		      display: "no"
+		    }
+	  ]	    
+	});
+      Questions.insert(
+	{
+	  question: "Name a reason your build is slow",
+	  number: 3,
+	  answers: [
+		    {
+		      text: "underpowered build server",
+		      score: 8,
+		      display: "no"
+		    },
+		    { 
+		      text: "too many tests",
+		      score: 6,
+		      display: "no"
+		    },
+		    {
+		      text: "Dev/poorly written code",
+		      score: 5,
+		      display: "no"
+		    },
+		    {
+		      text: "Too many dependencies",
+		      score: 4,
+		      display: "no"
+		    },
+		    {
+		      text: "gcc",
+		      score: 3,
+		      display: "no"
+		    },
+		    {
+		      text: "jvm (Java/Scala)",
+		      score: 3,
+		      display: "no"
+		    },
+		    {
+		      text: "large codebase/monolithic app",
+		      score: 3,
+		      display: "no"
+		    },
+		    {
+		      text: "it is not slow",
+		      score: 1,
+		      display: "no"
+		    }
+
+	  ]	    
+	});
+      Questions.insert(
+	{
+	  question: "______ Driven Development",
+	  number: 4,
+	  answers: [
+		    {
+		      text: "Test",
+		      score: 16,
+		      display: "no"
+		    },
+		    {
+		      text: "Anger/Hate",
+		      score: 7,
+		      display: "no"
+		    },
+		    { 
+		      text: "Behavior",
+		      score: 4,
+		      display: "no"
+		    },
+		    {
+		      text: "Asshole",
+		      score: 2,
+		      display: "no"
+		    },
+		    {
+		      text: "Beer",
+		      score: 2,
+		      display: "no"
+		    },
+		    {
+		      text: "README",
+		      score: 2,
+		      display: "no"
+		    },
+		    {
+		      text: "Compromise",
 		      score: 1,
 		      display: "no"
 		    },
 		    {
-		      text: "cd",
+		      text: "Hug",
 		      score: 1,
 		      display: "no"
 		    }
 	  ]	    
-	},
+	});
+      Questions.insert(
 	{
-	  question: "This is the second question",
-	  number: 2,
+	  question: "Name a SCaLE organizer or DevOps Day planner",
+	  number: 5,
+	  answers: [
+		    {
+		      text: "Ilan Rabinovitch",
+		      score: 10,
+		      display: "no"
+		    },
+		    { 
+		      text: "Brandon Burton",
+		      score: 4,
+		      display: "no"
+		    },
+		    {
+		      text: "Do not know anyone",
+		      score: 3,
+		      display: "no"
+		    },
+		    {
+		      text: "Gareth",
+		      score: 3,
+		      display: "no"
+		    },
+		    {
+		      text: "John 'Whatcha Talkin Bout' Willis",
+		      score: 2,
+		      display: "no"
+		    }
+	  ]	    
+	});
+      Questions.insert(
+	{
+	  question: "______ As A Service",
+	  number: 6,
 	  answers: [ 
 	    {
-	      text: "first ans",
-	      score: 100,
+	      text: "Software",
+	      score: 19,
 	      display: "no"
 	    },
 	    {
-	      text: "second",
+	      text: "Infrastructure",
+	      score: 14,
+	      display: "no"
+	    },
+	    {
+	      text: "Platform",
+	      score: 5,
+	      display: "no"
+	    },
+	    {
+	      text: "Service",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "Rage/Sarcasm/another emotion",
+	      score: 2,
+	      display: "no"
+	    },
+	    {
+	      text: "Hugs",
 	      score: 1,
 	      display: "no"
 	    }
 	  ]
-	}
-      );
-
+	});
+      Questions.insert(
+	{
+	  question: "Something you have only one of",
+	  number: 7,
+	  answers: [ 
+	    {
+	      text: "life",
+	      score: 6,
+	      display: "no"
+	    },
+	    {
+	      text: "spouse",
+	      score: 5,
+	      display: "no"
+	    },
+	    {
+	      text: "brain",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "cell phone",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "me",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "nose",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "availability zone",
+	      score: 1,
+	      display: "no"
+	    },
+	    {
+	      text: "/dev/house",
+	      score: 1,
+	      display: "no"
+	    }
+	  ]
+	});
+      Questions.insert(
+	{
+	  question: "What do SysAdmins spend most of their time doing?",
+	  number: 8,
+	  answers: [ 
+	    {
+	      text: "Fire fighting",
+	      score: 5,
+	      display: "no"
+	    },
+	    {
+	      text: "drinking",
+	      score: 4,
+	      display: "no"
+	    },
+	    {
+	      text: "fixing Dev screwups",
+	      score: 4,
+	      display: "no"
+	    },
+	    {
+	      text: "yak shaving",
+	      score: 4,
+	      display: "no"
+	    },
+	    {
+	      text: "being lazy",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "cat videos",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "scripting",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "games",
+	      score: 2,
+	      display: "no"
+	    },
+	    {
+	      text: "porn",
+	      score: 2,
+	      display: "no"
+	    },
+	    {
+	      text: "administering systems",
+	      score: 1,
+	      display: "no"
+	    }
+	  ]
+	});
+      Questions.insert(
+	{
+	  question: "Something you might hear asked at a post-mortem",
+	  number: 9,
+	  answers: [ 
+	    {
+	      text: "Who's fault is it?",
+	      score: 7,
+	      display: "no"
+	    },
+	    {
+	      text: "How can we prevent this in the future?",
+	      score: 5,
+	      display: "no"
+	    },
+	    {
+	      text: "fuck",
+	      score: 3,
+	      display: "no"
+	    },
+	    {
+	      text: "How did this get past QA?",
+	      score: 2,
+	      display: "no"
+	    }
+	  ]
+	});
+      Questions.insert(
+	{
+	  question: "Name something you might find in your logs",
+	  number: 10,
+	  answers: [ 
+	    {
+	      text: "errors",
+	      score: 11,
+	      display: "no"
+	    },
+	    {
+	      text: "exceptions",
+	      score: 4,
+	      display: "no"
+	    },
+	    {
+	      text: "Chinese",
+	      score: 2,
+	      display: "no"
+	    },
+	    {
+	      text: "Romanians",
+	      score: 2,
+	      display: "no"
+	    },
+	    {
+	      text: "warnings",
+	      score: 2,
+	      display: "no"
+	    },
+	    {
+	      text: "porn",
+	      score: 1,
+	      display: "no"
+	    },
+	    {
+	      text: "Russians",
+	      score: 1,
+	      display: "no"
+	    }
+	  ]	    
+	});
     }
   });
 }
